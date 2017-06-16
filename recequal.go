@@ -77,7 +77,7 @@ import (
 // will return false any map, pointer, or slice backing pointer value
 // found in v1 also appears in v2.
 //
-// BUG(cpcallen): RecEqual does not make any attempt to check the
+// N.B.: RecEqual does not make any attempt to check the
 // structure of interior pointers (i.e., a pointer pointing at an
 // array element or struct field), or verify their disjointness.  This
 // includes in particular the backing array of slices: given
@@ -243,3 +243,7 @@ func same(f1, f2 float64) bool {
 	}
 	return f1 == f2 || math.IsNaN(f1) && math.IsNaN(f2)
 }
+
+// BUG(cpcallen): RecEqual does not make any attempt to check the
+// structure of interior pointers; see note in documentation for that
+// function.
