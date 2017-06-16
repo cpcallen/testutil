@@ -29,46 +29,45 @@ import (
 // and cycles).  Additionally, recEqual is slightly more picky about
 // some types, and and more lenient about others, than DeepEqual is.
 //
-// Values of distinct types are never recursively equal.  Values of
+// • Values of distinct types are never recursively equal.  Values of
 // identical type are recursively equal if one of the following is
 // true:
 //
-// Boolean, integer and string values are recursively equal if they
+// • Boolean, integer and string values are recursively equal if they
 // are equal according to the == operator.
 //
-// Arrays are recursively equal if all their corresponding elements
+// • Arrays are recursively equal if all their corresponding elements
 // are recursively equal.
 //
-// Complex numbers are recursively equal if their corresponding real
+// • Complex numbers are recursively equal if their corresponding real
 // and imaginary parts are recursively equal.
 //
-// Floats are recursively equal if they are both NaN, both 0 or both
+// • Floats are recursively equal if they are both NaN, both 0 or both
 // -0; or if they are non-zero and equal according to the == operator.
 //
-// Interface values are recursively equal if their contents are
+// • Interface values are recursively equal if their contents are
 // recurisvely equal.
 //
-// Map values are recursively equal if they have the same length, and
-// their corresponding keys (according to ==) map to recursively equal
-// values AND ADDITIONALY that every occurrence of a map value m1
-// (i.e., map values derived from the same map literal or make() call)
-// in v1 corresponds to the same map value m2 in v2 (and vice versa).
+// • Map values are recursively equal if they have the same length,
+// and their corresponding keys (according to ==) map to recursively
+// equal values AND ADDITIONALY that every occurrence of a map value
+// m1 (i.e., map values derived from the same map literal or make()
+// call) in v1 corresponds to the same map value m2 in v2 (and vice
+// versa).  Note that recursive equality for maps with NaN keys is not
+// well-defined.
 //
-// Note that recursive equality for maps with NaN keys is
-// not well-defined.
-//
-// Pointer values are recursively equal if they point at recursively
+// • Pointer values are recursively equal if they point at recursively
 // equal values AND ADDITIONALLY if every occurence of pointer p1 in v1
 // corresponds to the same pointer p2 in v2 (and vice versa).
 //
-// Slice values are recursively equal if they are both nil or both
+// • Slice values are recursively equal if they are both nil or both
 // non-nil, and have the same length, and their corresponding elements
 // are deeply equal.
 //
-// Struct values are recursively equal if their corresponding fields
+// • Struct values are recursively equal if their corresponding fields
 // (exported and unexported) are recursively equal.
 //
-// Func values are recursively equal if they are both nil or if they
+// • Func values are recursively equal if they are both nil or if they
 // point to the same location.
 //
 // Comparison of Channel and unsafe.Pointer values is not implemented;
@@ -82,10 +81,15 @@ import (
 // structure of interior pointers (i.e., a pointer pointing at an
 // array element or struct field), or verify their disjointness.  This
 // includes in particular the backing array of slices: given
+//
 //     a := []int{0, 0, 0, 0}
+//
 // then
+//
 //     RecEqual([2][]int{a[0:2], a[0:2]}, [2][]int{a[0:2], a[2:4]}, true)
+//
 // returns true, as does
+//
 //     RecEqual([2][]int{a[0:2], a[0:2]}, [2][]int{a[0:2], a[2:4]}, false)
 //
 func RecEqual(x, y interface{}, disjoint bool) bool {
